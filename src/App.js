@@ -15,11 +15,12 @@ class BooksApp extends React.Component {
     showSearchPage: false
   }
 
-  componentDidMount() {
+  getAllBooks = () => {
     BooksAPI.getAll().then((books) => {
       const booksArr = []
       Object.keys(books).map((id) => {
         const newBook = {
+          id: books[id].id,
           title: books[id].title,
           authors: books[id].authors,
           shelf: books[id].shelf,
@@ -29,6 +30,16 @@ class BooksApp extends React.Component {
       })
       this.setState({books: booksArr})
     })
+  }
+
+  updateShelf = (book, shelf) => {
+    BooksAPI.update(book, shelf).then((res) => {
+      this.getAllBooks();
+    })
+  }
+
+  componentDidMount() {
+    this.getAllBooks();
   }
   render() {
     return (
@@ -63,15 +74,24 @@ class BooksApp extends React.Component {
               <div>
                 <div className="bookshelf">
                   <h2 className="bookshelf-title">Currently Reading</h2>
-                  <BookShelf books={this.state.books} shelfTitle={"currentlyReading"}/>
+                  <BookShelf
+                    books={this.state.books}
+                    shelfTitle={"currentlyReading"}
+                    onUpdateShelf={this.updateShelf}/>
                 </div>
                 <div className="bookshelf">
                   <h2 className="bookshelf-title">Want to Read</h2>
-                  <BookShelf books={this.state.books} shelfTitle={"wantToRead"}/>
+                  <BookShelf
+                    books={this.state.books}
+                    shelfTitle={"wantToRead"}
+                    onUpdateShelf={this.updateShelf}/>
                 </div>
                 <div className="bookshelf">
                   <h2 className="bookshelf-title">Read</h2>
-                  <BookShelf books={this.state.books} shelfTitle={"read"}/>
+                  <BookShelf
+                  books={this.state.books}
+                  shelfTitle={"read"}
+                  onUpdateShelf={this.updateShelf}/>
                 </div>
               </div>
             </div>
