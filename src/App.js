@@ -10,7 +10,16 @@ class BooksApp extends React.Component {
     books: [],
   }
 
-  getAllBooks = () => {
+
+  updateShelf = (book, newShelf) => {
+    BooksAPI.update(book, newShelf).then((res) => {
+      this.setState((prevState) => ({
+        books: prevState.books.map((prevBook) => prevBook.id === book.id ? {...prevBook, shelf:newShelf} : prevBook)
+      }))
+    })
+  }
+
+  componentDidMount() {
     BooksAPI.getAll().then((books) => {
       const booksArr = []
       Object.keys(books).map((id) => {
@@ -25,16 +34,6 @@ class BooksApp extends React.Component {
       })
       this.setState({books: booksArr})
     })
-  }
-
-  updateShelf = (book, shelf) => {
-    BooksAPI.update(book, shelf).then((res) => {
-      this.getAllBooks();
-    })
-  }
-
-  componentDidMount() {
-    this.getAllBooks();
   }
   render() {
     return (
