@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import BookShelf from './BookShelf'
+import BookShelf from './BookShelf';
+import * as BooksAPI from './BooksAPI';
+
 class Search extends Component {
     state = {
         query: "",
         showingResults: []
+    }
+    updateShelf = (book, newShelf) => {
+        this.setState((prevState) => ({
+            showingResults: prevState.showingResults.map((prevBook) => prevBook.id === book.id ? {...prevBook, shelf:newShelf} : prevBook)
+          }))
+        this.props.onUpdateShelf(book, newShelf);
     }
     updateQuery = (event) => {
         event.preventDefault();
@@ -56,7 +64,7 @@ class Search extends Component {
                     <BookShelf
                         books={this.state.showingResults}
                         shelfTitle={"all"}
-                        onUpdateShelf={this.props.onUpdateShelf}/>
+                        onUpdateShelf={this.updateShelf}/>
                 </div>
             </div>
         );
