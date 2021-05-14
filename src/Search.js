@@ -20,7 +20,7 @@ class Search extends Component {
         if(event.target.value !== "") {
             BooksAPI.search(event.target.value).then((results) => {
                 if(Array.isArray(results)) {
-                    Object.keys(results).map((id) => {
+                    Object.keys(results).filter((id) => (results[id].imageLinks)).map((id) => {
                         const foundBook = books.find((book) => (book.id === results[id].id))
                         if(foundBook) {
                             showingResults.push(foundBook)
