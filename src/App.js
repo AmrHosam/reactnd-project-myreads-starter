@@ -14,7 +14,9 @@ class BooksApp extends React.Component {
   updateShelf = (book, newShelf) => {
     BooksAPI.update(book, newShelf).then((res) => {
       this.setState((prevState) => ({
-        books: prevState.books.map((prevBook) => prevBook.id === book.id ? {...prevBook, shelf:newShelf} : prevBook)
+        books: prevState.books.filter((prevBook) => (prevBook.id === book.id)).length === 0 ?
+          prevState.books.concat([{...book, shelf:newShelf}])
+          :prevState.books.map((prevBook) => prevBook.id === book.id ? {...prevBook, shelf:newShelf} : prevBook)
       }))
     })
   }
